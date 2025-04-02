@@ -1,0 +1,6 @@
+transformers>=4.48.1
+pandas>=2.2
+numpy>=1.26
+scipy>=1.13
+requests>=2.32
+torch>=2.5.1

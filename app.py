@@ -60,14 +60,12 @@ with gradio.Blocks() as demo:
         with gradio.Column(scale=2):
             detections = gradio.HighlightedText(label='DETECTIONS', interactive=False)
             scores = gradio.JSON(label='SCORES')
-            compact = gradio.Textbox(label='COMPACT')
+            compact = gradio.Textbox(label='COMPACT', lines=7)
     with gradio.Row():
         detect = gradio.Button(value='Submit', variant='huggingface')
         gradio.ClearButton([text, detections, scores, compact], variant='secondary')
-        stop = gradio.Button('Disconnect', variant='stop', visible=True, size='lg')
 
     detect.click(custom, inputs=text, outputs=[detections, scores, compact])
-    stop.click(fn=__kill)
     gradio.Examples(examples=configurations.examples, inputs=[text], examples_per_page=1)
 
-demo.launch(server_port=7860)
+demo.launch(server_port=7860, state_session_capacity=35)

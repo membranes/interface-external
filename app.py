@@ -47,7 +47,12 @@ def __kill() -> str:
 
 with gradio.Blocks() as demo:
 
-    gradio.Markdown(value='<h1>Token Classification</h1><br><b>An illustration.</b>', line_breaks=True)
+    gradio.Markdown(value=('<h1>Token Classification</h1><br><b>An illustrative interactive interface; the '
+                           'interface software allows for advanced interfaces.</b><br><br>The classes are '
+                           '<b>organisation</b> (b-org, i-org), <b>person</b> (b-per, i-per), '
+                           '<b>time</b> (b-tim, i-tim), <b>geographic entity</b> (b-geo, i-geo), <br>'
+                           '<b>geo-political entity</b> (b-gpe, i-gpe).  The letter <b>b</b> '
+                           'denotes <i><b>beginning</b></i>, whilst <b>i</b> denotes <i><b>inside</b></i>.<br>'), line_breaks=True)
 
     with gradio.Row():
         with gradio.Column(scale=3):

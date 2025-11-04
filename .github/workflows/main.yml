@@ -1,0 +1,31 @@
+name: 'Product: Detecting (Token Classification) '
+
+on: [push]
+
+jobs:
+  sync-to-hub:
+    name: huggingface.co
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Actions
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: false
+
+      - name: Push to hub
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f ${{ github.workspace }}/.github/workflows/requirements.txt ]; then pip install -r ${{ github.workspace }}/.github/workflows/requirements.txt; fi
+          python ${{ github.workspace }}/.github/workflows/spaces.py \
+            --repo_id "${{ secrets.HF_USERNAME }}/${{ secrets.HF_SPACE }}" \
+            --token ${{ secrets.HF_ENTRY }} \
+            --repo_type 'space' \
+            --folder_path "src"

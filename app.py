@@ -1,9 +1,12 @@
 """Module app.py"""
+import logging
 import gradio
 import pandas as pd
 import transformers
+import subprocess
 
 import src.algorithms.interface
+import src.functions.cache
 import src.config
 
 # Pipeline
@@ -32,6 +35,15 @@ def custom(piece):
 
     return {'text': piece, 'entities': tokens}, summary.to_dict(orient='records'), tokens
 
+def __kill() -> str:
+    """
+
+    :return:
+    """
+
+    src.functions.cache.Cache().exc()
+
+    return subprocess.check_output('kill -9 $(lsof -t -i:7860)', shell=True, text=True)
 
 with gradio.Blocks() as demo:
 
@@ -47,8 +59,10 @@ with gradio.Blocks() as demo:
     with gradio.Row():
         detect = gradio.Button(value='Submit', variant='huggingface')
         gradio.ClearButton([text, detections, scores, compact], variant='secondary')
+        stop = gradio.Button('Disconnect', variant='stop', visible=True, size='lg')
 
-    detect.click(custom, inputs=text, outputs=[detections, scores, compact])    
+    detect.click(custom, inputs=text, outputs=[detections, scores, compact])
+    stop.click(fn=__kill)
     gradio.Examples(examples=configurations.examples, inputs=[text], examples_per_page=1)
 
 demo.launch(server_port=7860)
